@@ -18,7 +18,7 @@ function RecipeDetail({ recipe, onEdit, onDelete }) {
       ${recipe.ingredients.join(', ')}
       
       Instructions:
-      ${recipe.instructions.join(', ')}
+      ${recipe.instructions.join(' ')}
     `;
 
     if (navigator.share) {

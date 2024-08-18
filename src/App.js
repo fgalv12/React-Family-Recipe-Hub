@@ -3,16 +3,15 @@ import './App.css';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeForm from './components/RecipeForm';
-import Button from './components/Button';
-import SearchBar from './components/SearchBar';
+import Navigation from './components/Navigation';
+import { resetView } from './utils/stateHelpers';
 
 function App() {
-  //State variables
   const [currentView, setCurrentView] = useState('home');
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isEditing, setIsEditing] = useState(false); //new state variable
-  const [updatedRecipe, setUpdatedRecipe] = useState(null); //new state variable
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedRecipe, setUpdatedRecipe] = useState(null);
   const [recipes, setRecipes] = useState([
     { id: 1, name: 'Spaghetti', category: 'Dinner', image: 'spaghetti.jpg', ingredients: ['1 Cup of Spaghetti', '1/2 Cup of Marinara Sauce', '1 lb Ground Beef', '1/4 Cup of Parmesan Cheese'], instructions: ['Boil water in a pot.', 'Add spaghetti to boiling water.', 'Cook spaghetti for 10 minutes.', 'Cook ground beef until brown and season.', 'Drain water from spaghetti.', 'Add marinara sauce, ground beef, and parmesan cheese to spaghetti.', 'Mix well and serve.'] },
     { id: 2, name: 'Pecan Pie', category: 'Desert', image: 'pecan-pie.jpg', ingredients: ['1 Cup of Sugar', '1 Cup of Corn Syrup', '1/2 Cup of Butter', '1 Teaspoon of Vanilla', '1/4 Teaspoon of Salt', '3 Large Eggs', '1 Cup of Pecans'], instructions: ['Preheat oven to 350 degrees.', 'Mix sugar, corn syrup, butter, vanilla, and salt in a bowl.', 'Add eggs and mix well.', 'Stir in pecans.', 'Pour mixture into pie crust.', 'Bake for 60 minutes.', 'Let cool and serve.'] },
@@ -26,43 +25,25 @@ function App() {
   ]);
 
   const handleHomeClick = () => {
-    setCurrentView('home');
-    setSelectedRecipe(null);
-    setSearchTerm('');
+    resetView(setCurrentView, setSelectedRecipe, setSearchTerm);
   };
 
-  const handleAddClick = () => {
-    setCurrentView('add');
-  };
-
-  const handleRecipeClick = (recipe) => {
-    setCurrentView('detail');
+  const handleViewChange = (view, recipe = null) => {
+    setCurrentView(view);
     setSelectedRecipe(recipe);
   };
 
-  const handleSearch = (searchTerm) => {
-    setSearchTerm(searchTerm);
-  };
-  //filter recipes based on search 
-  const filteredRecipes = recipes.filter(recipe => 
-    recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    recipe.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  //new function to handle edit and add recipe
   const handleSaveRecipe = (recipe) => {
     if (isEditing) {
-      //update the recipe in the array
       setRecipes(recipes.map(r => r.id === recipe.id ? recipe : r));
       setIsEditing(false);
     } else {
-      //generate a new id for the recipe
       const newRecipe = { ...recipe, id: recipes.length + 1 };
       setRecipes([...recipes, newRecipe]);
     }
-    setCurrentView('home');
+    resetView(setCurrentView, setSelectedRecipe, setSearchTerm);
   };
-
+  
   const handleEditClick = (recipe) => {
     setUpdatedRecipe(recipe);
     setIsEditing(true);
@@ -71,8 +52,13 @@ function App() {
 
   const handleDeleteRecipe = (recipeToDelete) => {
     setRecipes(recipes.filter(recipe => recipe.id !== recipeToDelete.id));
-    setCurrentView('home');
+    resetView(setCurrentView, setSelectedRecipe, setSearchTerm);
   };
+
+  const filteredRecipes = recipes.filter(recipe =>
+    recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    recipe.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className='App'>
@@ -80,15 +66,11 @@ function App() {
         <h1>Family Recipe Hub</h1>
       </header>
       <main>
-        <div className='navigation'>
-          <Button label="Home" onClick={handleHomeClick}/>
-          <Button label="Add" onClick={handleAddClick}/>
-          <SearchBar onSearch={handleSearch} />
-        </div>
-        {currentView === 'home' && <RecipeList recipes={filteredRecipes} onRecipeClick={handleRecipeClick} />}
+        <Navigation onHomeClick={handleHomeClick} onAddClick={() => handleViewChange('add')} onSearch={setSearchTerm} />
+        {currentView === 'home' && <RecipeList recipes={filteredRecipes} onRecipeClick={(recipe) => handleViewChange('detail', recipe)} />}
         {currentView === 'detail' && selectedRecipe && <RecipeDetail recipe={selectedRecipe} onEdit={handleEditClick} onDelete={handleDeleteRecipe} />}
-        {currentView === 'add' && <RecipeForm onSave={handleSaveRecipe} onCancel={handleHomeClick} />}
-        {currentView === 'edit' && updatedRecipe && <RecipeForm recipe={updatedRecipe} onSave={handleSaveRecipe} onCancel={handleHomeClick} />}
+        {currentView === 'add' && <RecipeForm onSave={handleSaveRecipe} onCancel={() => handleViewChange('home')} />}
+        {currentView === 'edit' && updatedRecipe && <RecipeForm recipe={updatedRecipe} onSave={handleSaveRecipe} onCancel={() => handleViewChange('home')} />}
       </main>
     </div>
   );
