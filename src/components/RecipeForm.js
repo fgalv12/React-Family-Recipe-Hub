@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from './Button';
 import { handleImageUpload } from '../utils/imageHelpers';
 
@@ -9,6 +9,14 @@ function RecipeForm({ recipe = {}, onSave, onCancel }) {
   const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState(recipe.ingredients || []);
   const [instructions, setInstructions] = useState(recipe.instructions ? recipe.instructions.join('. ') : '');
+  const [prepTime, setPrepTime] = useState(recipe.prepTime || 0);
+  const [cookTime, setCookTime] = useState(recipe.cookTime || 0);
+  const [totalTime, setTotalTime] = useState(recipe.totalTime || 0);
+
+  useEffect(() => {
+    // Automatically update totalTime whenever prepTime or cookTime changes
+    setTotalTime(prepTime + cookTime);
+  }, [prepTime, cookTime]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,7 +33,10 @@ function RecipeForm({ recipe = {}, onSave, onCancel }) {
       category, 
       image: imageUrl, 
       ingredients: ingredients.map(item => item.trim()),
-      instructions: instructions.split('.').map(item => item.trim() + '.').filter(Boolean)
+      instructions: instructions.split('.').map(item => item.trim() + '.').filter(Boolean),
+      prepTime,
+      cookTime,
+      totalTime
     };
     onSave(updatedRecipe);
   };
@@ -48,7 +59,12 @@ function RecipeForm({ recipe = {}, onSave, onCancel }) {
           {image && <img src={image} alt='Preview' style={{ width: '200px', marginTop: '5px' }} />}
           <textarea value={ingredients.join(', ')} onChange={(e) => setIngredients(e.target.value.split(', '))} placeholder="Ingredients (separate by commas)" required/>
           <textarea value={instructions} onChange={(e) => setInstructions(e.target.value)} placeholder="Instructions (separate by periods)" required/>
-
+          <label>Prep Time:</label>
+          <input type="number" value={prepTime} onChange={(e) => setPrepTime(parseInt(e.target.value, 10) || 0)} placeholder="Prep Time (minutes)" required />
+          <label>Cook Time:</label>
+          <input type="number" value={cookTime} onChange={(e) => setCookTime(parseInt(e.target.value, 10) || 0)} placeholder="Cook Time (minutes)" required />
+          <label>Total Time: (Automatic)</label>
+          <input type="number" value={totalTime} readOnly placeholder="Total Time (calculated automatically)" />
         <div className="detail-navigation">
           <Button label="Save" onClick={handleSubmit}/>
           <Button label="Cancel" onClick={onCancel}/>

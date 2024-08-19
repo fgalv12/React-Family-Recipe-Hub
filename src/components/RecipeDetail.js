@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import TimingChart from './TimingChart';
 
 function RecipeDetail({ recipe, onEdit, onDelete }) {
   const handleEdit = () => {
@@ -19,6 +20,11 @@ function RecipeDetail({ recipe, onEdit, onDelete }) {
       
       Instructions:
       ${recipe.instructions.join(' ')}
+
+      Time Overview:
+      Prep Time: ${recipe.prepTime || 0} minutes
+      Cook Time: ${recipe.cookTime || 0} minutes
+      Total Time: ${recipe.totalTime || 0} minutes
     `;
 
     if (navigator.share) {
@@ -61,6 +67,14 @@ function RecipeDetail({ recipe, onEdit, onDelete }) {
               <li key={index}>{instructions}</li>
               ))}
             </ul>
+          </div>
+          <div className="recipe-timing">
+            <h3 className='detail-info'>Timing Overview:</h3>
+            <TimingChart 
+              prepTime={recipe.prepTime || 0} 
+              cookTime={recipe.cookTime || 0} 
+              totalTime={recipe.totalTime || 0} 
+            />
           </div>
         </div>
       </div>
