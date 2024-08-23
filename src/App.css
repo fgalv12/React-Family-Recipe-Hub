@@ -1,10 +1,7 @@
 .App {
   text-align: center;
-  /* background-image: url('background.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: center; */
+  background-image: linear-gradient(white, lightskyblue, white);
+  min-height: 100vh;
 }
 
 .App-header {
@@ -16,7 +13,6 @@
   justify-content: center;
   color: white;
 }
-
 
 .navigation {
   margin: 20px;
@@ -77,7 +73,7 @@
   border-radius: 5px;
 }
 
-.recipe-list{
+.recipe-list {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,7 +81,8 @@
   flex-wrap: wrap;
 }
 
-.recipe-detail, .recipe-form {
+.recipe-detail,
+.recipe-form {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,11 +98,11 @@
   justify-content: center;
   flex-direction: column;
   flex-wrap: wrap;
-  border: 3px solid #cccccc; 
+  border: 3px solid #cccccc;
   border-radius: 10px;
   padding: 10px;
   margin: 5px;
-  font-family: Tahoma, sans-serif; 
+  font-family: Tahoma, sans-serif;
 }
 
 .recipe-form textarea {
@@ -113,13 +110,13 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 300px; 
-  height: 100px; 
-  border: 3px solid #cccccc; 
+  width: 300px;
+  height: 100px;
+  border: 3px solid #cccccc;
   border-radius: 10px;
-  padding: 10px; 
+  padding: 10px;
   margin: 5px;
-  font-family: Tahoma, sans-serif; 
+  font-family: Tahoma, sans-serif;
 }
 
 .recipe-card {
@@ -159,7 +156,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid #ccc;
-  border-radius: 20px;  
+  border-radius: 20px;
   background-color: hsl(0, 0%, 98%);
   box-shadow: #ccc 2px 2px 5px 0px;
   padding: 20px;

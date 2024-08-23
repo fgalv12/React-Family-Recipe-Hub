@@ -5,6 +5,8 @@
   "dependencies": {
     "@testing-library/user-event": "^13.5.0",
     "chart.js": "^4.4.3",
+    "flow-bin": "^0.244.0",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
@@ -15,7 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "flow": "flow"
   },
   "eslintConfig": {
     "extends": [
@@ -38,9 +41,13 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-transform-private-property-in-object": "^7.24.7",
+    "@eslint/js": "^9.9.0",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.0",
     "cypress": "^13.13.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.35.0",
+    "globals": "^15.9.0",
     "install": "^0.13.0",
     "jest": "^27.5.1",
     "npm": "^10.8.2"
