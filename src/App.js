@@ -282,11 +282,14 @@ function App() {
     resetView(setCurrentView, setSelectedRecipe, setSearchTerm);
   };
 
-  const filteredRecipes = recipes.filter(
-    (recipe) =>
-      recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      recipe.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredRecipes = recipes
+    .filter(
+      (recipe) =>
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        recipe.category.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="App">
