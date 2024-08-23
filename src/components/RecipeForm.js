@@ -10,7 +10,11 @@ function RecipeForm({ recipe = {}, onSave, onCancel }) {
   const [imageFile, setImageFile] = useState(null);
   const [ingredients, setIngredients] = useState(recipe.ingredients || []);
   const [instructions, setInstructions] = useState(
-    recipe.instructions ? recipe.instructions.join(". ") : ""
+    recipe.instructions
+      ? recipe.instructions
+          .map((item) => item.trim().replace(/\.$/, ""))
+          .join(". ")
+      : ""
   );
   const [prepTime, setPrepTime] = useState(recipe.prepTime || 0);
   const [cookTime, setCookTime] = useState(recipe.cookTime || 0);
@@ -38,8 +42,9 @@ function RecipeForm({ recipe = {}, onSave, onCancel }) {
       ingredients: ingredients.map((item) => item.trim()),
       instructions: instructions
         .split(".")
-        .map((item) => item.trim() + ".")
-        .filter(Boolean),
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .map((item) => item + "."),
       prepTime,
       cookTime,
       totalTime,
